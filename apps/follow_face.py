@@ -1,8 +1,10 @@
 # OpenCV program to detect face in real time
 # import libraries of python OpenCV
 # where its functionality resides
+
+from lib.irobot_lib.iRobot import iRobot
 import cv2
-# new comment
+import numpy as np
 
 # load the required trained XML classifiers
 # https://github.com/Itseez/opencv/blob/master/
@@ -14,14 +16,11 @@ import cv2
 face_cascade = cv2.CascadeClassifier(
     'apps/lib/haarcascade/haarcascade_frontalface_default.xml')
 
-# https://github.com/Itseez/opencv/blob/master
-# /data/haarcascades/haarcascade_eye.xml
-# Trained XML file for detecting eyes
-eye_cascade = cv2.CascadeClassifier(
-    'apps/lib/haarcascade/haarcascade_eye.xml')
 
 # capture frames from a camera
 cap = cv2.VideoCapture(0)
+
+show_cam = False
 
 # loop runs if capturing has been initialized.
 while 1:
@@ -35,22 +34,25 @@ while 1:
     # Detects faces of different sizes in the input image
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
+    height, width, rgb = np.shape(img)
+
     for (x, y, w, h) in faces:
-        # To draw a rectangle in a face
-        cv2.rectangle(img, (x, y), (x+w, y+h), (255, 255, 0), 2)
-        roi_gray = gray[y:y+h, x:x+w]
-        roi_color = img[y:y+h, x:x+w]
+        if(x+w/2 < width/2):
+            print("go right")
+            iRobot.turnRight(self, speed=0.5)
+        else:
+            print("go left")
+            iRobot.turnLeft(self, speed=0.5)
 
-        # Detects eyes of different sizes in the input image
-        eyes = eye_cascade.detectMultiScale(roi_gray)
-
-        # To draw a rectangle in eyes
-        for (ex, ey, ew, eh) in eyes:
-            cv2.rectangle(roi_color, (ex, ey),
-                          (ex+ew, ey+eh), (0, 127, 255), 2)
+        if(show_cam):
+            # To draw a rectangle in a face
+            cv2.rectangle(img, (x, y), (x+w, y+h), (255, 255, 0), 2)
+            roi_gray = gray[y:y+h, x:x+w]
+            roi_color = img[y:y+h, x:x+w]
 
     # Display an image in a window
-    cv2.imshow('img', img)
+    if(show_cam):
+        cv2.imshow('img', img)
 
     # Wait for Esc key to stop
     k = cv2.waitKey(30) & 0xff
