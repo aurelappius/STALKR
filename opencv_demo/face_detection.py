@@ -2,6 +2,7 @@
 # import libraries of python OpenCV
 # where its functionality resides
 import cv2
+# new comment
 
 # load the required trained XML classifiers
 # https://github.com/Itseez/opencv/blob/master/
