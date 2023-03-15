@@ -20,6 +20,10 @@ face_cascade = cv2.CascadeClassifier(
 # capture frames from a camera
 cap = cv2.VideoCapture(0)
 
+# create irobot instance
+
+robot = iRobot()
+
 show_cam = False
 
 # loop runs if capturing has been initialized.
@@ -39,10 +43,10 @@ while 1:
     for (x, y, w, h) in faces:
         if(x+w/2 < width/2):
             print("go right")
-            iRobot.turnRight(self, speed=0.5)
+            robot.turnRight(speed=0.5)
         else:
             print("go left")
-            iRobot.turnLeft(self, speed=0.5)
+            robot.turnLeft(speed=0.5)
 
         if(show_cam):
             # To draw a rectangle in a face
