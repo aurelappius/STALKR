@@ -4,6 +4,17 @@
 import cv2
 # new comment
 
+# Raspberry pi stuff
+from picamera.array import PiRGBArray
+from picamera import PiCamera
+import time
+# initialize the camera and grab a reference to the raw camera capture
+camera = PiCamera()
+rawCapture = PiRGBArray(camera)
+# allow the camera to warmup
+time.sleep(0.1)
+
+
 # load the required trained XML classifiers
 # https://github.com/Itseez/opencv/blob/master/
 # data/haarcascades/haarcascade_frontalface_default.xml
@@ -27,7 +38,11 @@ cap = cv2.VideoCapture(0)
 while 1:
 
     # reads frames from a camera
-    ret, img = cap.read()
+    # grab an image from the camera
+    camera.capture(rawCapture, format="bgr")
+    img = rawCapture.array
+
+    # ret, img = cap.read()
 
     # convert to gray scale of each frames
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
