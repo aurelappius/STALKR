@@ -1,13 +1,12 @@
 # OpenCV program to detect face in real time
 # import libraries of python OpenCV
 # where its functionality resides
+import time
+from picamera import PiCamera
+from picamera.array import PiRGBArray
 import cv2
-# new comment
 
 # Raspberry pi stuff
-from picamera.array import PiRGBArray
-from picamera import PiCamera
-import time
 # initialize the camera and grab a reference to the raw camera capture
 camera = PiCamera()
 rawCapture = PiRGBArray(camera)
@@ -32,7 +31,7 @@ eye_cascade = cv2.CascadeClassifier(
     'apps/lib/haarcascade/haarcascade_eye.xml')
 
 # capture frames from a camera
-cap = cv2.VideoCapture(0)
+#cap = cv2.VideoCapture(0)
 
 # loop runs if capturing has been initialized.
 while 1:
