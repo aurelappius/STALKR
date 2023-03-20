@@ -22,22 +22,22 @@ class iRobot:
 
     # Inputs: speed = 0 - 1 (float)
     def moveForward(self, speed):
-        power = iRobot.speedToPower(speed)
+        power = iRobot.speedToPower(speedToConvert=speed)
         self.bot.drive_direct(power, power)
 
     # Inputs: speed = 0 - 1 (float)
     def moveBackwards(self, speed):
-        power = iRobot.speedToPower(speed)
+        power = iRobot.speedToPower(speedToConvert=speed)
         self.bot.drive_direct(-power, -power)
 
     # Inputs: speed = 0 - 1 (float)
     def turnLeft(self, speed):
-        power = iRobot.speedToPower(speed)
+        power = iRobot.speedToPower(speedToConvert=speed)
         self.bot.drive_direct(-power, power)
 
     # Inputs: speed = 0 - 1 (float)
     def turnRight(self, speed):
-        power = iRobot.speedToPower(speed)
+        power = iRobot.speedToPower(speedToConvert=speed)
         self.bot.drive_direct(power, -power)
 
     def moveStop(self):
@@ -51,8 +51,8 @@ class iRobot:
 
     # Inputs: speed = 0 - 1 (float)
     # Returns: power = -500 - 500 (int)
-    def speedToPower(self, speed):
-        return int(speed * 500)
+    def speedToPower(self, speedToConvert):
+        return int(speedToConvert * 500)
 
     def printSensors(self):
         print('-'*70)

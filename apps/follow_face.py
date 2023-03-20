@@ -14,7 +14,7 @@ import numpy as np
 # from a lot of positive(faces) and negative(non-faces)
 # images.
 face_cascade = cv2.CascadeClassifier(
-    'apps/lib/haarcascade/haarcascade_frontalface_default.xml')
+    'lib/haarcascade/haarcascade_frontalface_default.xml')
 
 
 # capture frames from a camera
@@ -24,7 +24,7 @@ cap = cv2.VideoCapture(0)
 
 robot = iRobot()
 
-show_cam = False
+show_cam = True
 
 # loop runs if capturing has been initialized.
 while 1:
