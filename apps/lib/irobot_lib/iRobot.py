@@ -1,6 +1,6 @@
 # iRobot Class
 from pycreate2 import Create2
-
+import math
 
 class iRobot:
     def __init__(self):
@@ -24,6 +24,32 @@ class iRobot:
     def moveForward(self, speed):
         power = iRobot.speedToPower(self, speedToConvert=speed)
         self.bot.drive_direct(power, power)
+
+    # Inputs: distance (mm) (float)
+    def moveForwardDist(self, dist):
+        gain = 1
+        self.get_sensors()
+        encoderLeftIn = self.sensors.encoder_counts_left
+        encoderRightIn = self.sensors.encoder_counts_right
+        
+        while(True): 
+            self.get_sensors()
+
+            encoderLeft = self.sensors.encoder_counts_left
+            distanceLeft = (encoderLeft-encoderLeftIn) * (math.pi * 72.0 / 508.8)
+            
+            encoderRight = self.sensors.encoder_counts_right
+            distanceRight = (encoderRight-encoderRightIn) * (math.pi * 72.0 / 508.8)
+
+            if ((dist-distanceLeft) < 1 and (dist-distanceRight) < 1):
+                break
+
+            else:
+                powerLeft = (1-(distanceLeft / (dist-distanceLeft))) * gain * 500
+                powerRight = (1-(distanceRight / (dist-distanceRight))) * gain * 500
+
+                self.bot.drive_direct(powerLeft,powerRight)
+
 
     # Inputs: speed = 0 - 1 (float)
     def moveBackwards(self, speed):
