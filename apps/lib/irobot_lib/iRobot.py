@@ -11,7 +11,7 @@ class iRobot:
         # Initialize the bot in full access mode
         self.start()
         # Ensure bot is stopped
-        self.drive_stop()
+        #self.drive_stop()
 
     def start(self):
         self.bot = Create2(port=self.port)
