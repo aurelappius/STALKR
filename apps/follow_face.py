@@ -3,7 +3,8 @@
 # where its functionality resides
 
 from lib.irobot_lib.iRobot import iRobot
-import cv2
+from threading import Thread
+import cv2, time
 import numpy as np
 
 # load the required trained XML classifiers
@@ -15,70 +16,93 @@ import numpy as np
 # images.
 #face_cascade = cv2.CascadeClassifier(
  #   'lib/haarcascade/haarcascade_frontalface_default.xml')
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
 
-# capture frames from a camera
-cap = cv2.VideoCapture(0)
-cap.set(cv2.CAP_PROP_BUFFERSIZE, 0)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 
-# create irobot instance
+class ThreadedCamera(object):
+    def __init__(self, src=0):
+        self.cap = cv2.VideoCapture(src)
+        self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 2)
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 
-robot = iRobot()
+        self.face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
-show_cam = True
-
-# Variables
-deadZone = 100;
-
-
-# loop runs if capturing has been initialized.
-while True:
-
-    # reads frames from a camera
-    ret, img = cap.read()
-
-    # convert to gray scale of each frames
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-    # Detects faces of different sizes in the input image
-    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-
-    height, width, rgb = np.shape(img)
-
-    for (x, y, w, h) in faces:
-        leftBoundary = x+w/2+deadZone/2
-        rightBoundary = x+w/2-deadZone/2
+        # FPS = 1/X
+        # X = desired FPS
+        self.FPS = 1/10
+        self.FPS_MS = int(self.FPS * 1000)
         
-        if( leftBoundary < width/2):
-            print("go right")
+        # Start frame retrieval thread
+        self.thread = Thread(target=self.update, args=())
+        self.thread.daemon = True
+        self.thread.start()
+
+        # Variables
+        self.deadZone = 100;
+    
+        self.rotateCommand = None
+        
+    def update(self):
+        while True:
+            if self.cap.isOpened():
+                (self.status, self.frame) = self.cap.read()
+                
+                # convert to gray scale of each frames
+                gray = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)
+
+                # Detects faces of different sizes in the input image
+                self.faces = self.face_cascade.detectMultiScale(gray, 1.3, 5)
+
+                height, width, rgb = np.shape(self.frame)
+
+                for (x, y, w, h) in self.faces:
+                    leftBoundary = x+w/2+self.deadZone/2
+                    rightBoundary = x+w/2-self.deadZone/2
+
+                    cv2.rectangle(self.frame, (x, y), (x+w, y+h), (255, 255, 0), 2)
+
+                    if( leftBoundary < width/2):
+                        print("go right")
+                        self.rotateCommand = "Right"
+                    elif( rightBoundary > width/2):
+                        print("go left")
+                        self.rotateCommand = "Left"
+                    else:
+                        print("stop")
+                        self.rotateCommand = "Stop"
+
+            time.sleep(self.FPS)
+            
+    def show_frame(self):
+        cv2.imshow('frame', self.frame)
+        cv2.waitKey(self.FPS_MS)
+    
+    def close(self):
+        self.cap.release()
+        cv2.destroyAllWindows()
+
+if __name__ == '__main__':
+    src = 0
+    threaded_camera = ThreadedCamera(src)
+
+    # create irobot instance
+    robot = iRobot()
+
+    while True:
+        try:
+            threaded_camera.show_frame()
+        except AttributeError:
+            pass
+
+        if(threaded_camera.rotateCommand == "Right"):
             robot.turnRight(speed=0.1)
-        elif( rightBoundary > width/2):
-            print("go left")
+        elif(threaded_camera.rotateCommand == "Left"):
             robot.turnLeft(speed=0.1)
-        else:
-            print("stop")
+        elif(threaded_camera.rotateCommand == "Stop"):
             robot.moveStop()
 
-        if(show_cam):
-            # To draw a rectangle in a face
-            cv2.rectangle(img, (x, y), (x+w, y+h), (255, 255, 0), 2)
-            roi_gray = gray[y:y+h, x:x+w]
-            roi_color = img[y:y+h, x:x+w]
-
-    # Display an image in a window
-    if(show_cam):
-        cv2.imshow('img', img)
-
-    # Wait for Esc key to stop
-    k = cv2.waitKey(30) & 0xff
-    if k == 27:
-        break
-
-# Close the window
-cap.release()
-
-# De-allocate any associated memory usage
-cv2.destroyAllWindows()
+        # Wait for Esc key to stop
+        k = cv2.waitKey(30) & 0xff
+        if k == 27:
+            break
