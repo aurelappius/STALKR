@@ -48,12 +48,16 @@ while True:
     for (x, y, w, h) in faces:
         leftBoundary = x+w/2+deadZone/2
         rightBoundary = x+w/2-deadZone/2
+        
         if( leftBoundary < width/2):
             print("go right")
             robot.turnRight(speed=0.1)
         elif( rightBoundary > width/2):
             print("go left")
             robot.turnLeft(speed=0.1)
+        else:
+            print("stop")
+            robot.moveStop()
 
         if(show_cam):
             # To draw a rectangle in a face
