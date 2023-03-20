@@ -22,22 +22,22 @@ class iRobot:
 
     # Inputs: speed = 0 - 1 (float)
     def moveForward(self, speed):
-        power = iRobot.speedToPower(speedToConvert=speed)
+        power = iRobot.speedToPower(self, speedToConvert=speed)
         self.bot.drive_direct(power, power)
 
     # Inputs: speed = 0 - 1 (float)
     def moveBackwards(self, speed):
-        power = iRobot.speedToPower(speedToConvert=speed)
+        power = iRobot.speedToPower(self, speedToConvert=speed)
         self.bot.drive_direct(-power, -power)
 
     # Inputs: speed = 0 - 1 (float)
     def turnLeft(self, speed):
-        power = iRobot.speedToPower(speedToConvert=speed)
+        power = iRobot.speedToPower(self, speedToConvert=speed)
         self.bot.drive_direct(-power, power)
 
     # Inputs: speed = 0 - 1 (float)
     def turnRight(self, speed):
-        power = iRobot.speedToPower(speedToConvert=speed)
+        power = iRobot.speedToPower(self, speedToConvert=speed)
         self.bot.drive_direct(power, -power)
 
     def moveStop(self):
