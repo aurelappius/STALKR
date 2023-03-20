@@ -20,6 +20,9 @@ face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_fronta
 
 # capture frames from a camera
 cap = cv2.VideoCapture(0)
+cap.set(cv2.CAP_PROP_BUFFERSIZE, 0)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 400)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 600)
 
 # create irobot instance
 
