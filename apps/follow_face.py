@@ -13,12 +13,16 @@ import numpy as np
 # object we want to detect a cascade function is trained
 # from a lot of positive(faces) and negative(non-faces)
 # images.
-face_cascade = cv2.CascadeClassifier(
-    'lib/haarcascade/haarcascade_frontalface_default.xml')
+#face_cascade = cv2.CascadeClassifier(
+ #   'lib/haarcascade/haarcascade_frontalface_default.xml')
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
 
 # capture frames from a camera
 cap = cv2.VideoCapture(0)
+cap.set(cv2.CAP_PROP_BUFFERSIZE, 0)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 
 # create irobot instance
 
@@ -26,8 +30,12 @@ robot = iRobot()
 
 show_cam = True
 
+# Variables
+deadZone = 100;
+
+
 # loop runs if capturing has been initialized.
-while 1:
+while True:
 
     # reads frames from a camera
     ret, img = cap.read()
@@ -41,12 +49,18 @@ while 1:
     height, width, rgb = np.shape(img)
 
     for (x, y, w, h) in faces:
-        if(x+w/2 < width/2):
+        leftBoundary = x+w/2+deadZone/2
+        rightBoundary = x+w/2-deadZone/2
+        
+        if( leftBoundary < width/2):
             print("go right")
-            robot.turnRight(speed=0.5)
-        else:
+            robot.turnRight(speed=0.1)
+        elif( rightBoundary > width/2):
             print("go left")
-            robot.turnLeft(speed=0.5)
+            robot.turnLeft(speed=0.1)
+        else:
+            print("stop")
+            robot.moveStop()
 
         if(show_cam):
             # To draw a rectangle in a face
