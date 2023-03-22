@@ -31,7 +31,7 @@ class ThreadedCamera(object):
 
         # FPS = 1/X
         # X = desired FPS
-        self.FPS = 1/10
+        self.FPS = 1/25
         self.FPS_MS = int(self.FPS * 1000)
 
         # Start frame retrieval thread
@@ -40,7 +40,7 @@ class ThreadedCamera(object):
         self.thread.start()
 
         # Variables
-        self.deadZone = 100
+        self.deadZone = 200
 
         self.rotateCommand = None
         self.moveCommand = None
@@ -115,10 +115,10 @@ if __name__ == '__main__':
         elif(threaded_camera.rotateCommand == "Stop"):
             robot.moveStop()
         elif(threaded_camera.moveCommand == "Fwd"):
-            robot.moveForward(0.1)
+            robot.moveForward(speed=0.1)
         elif(threaded_camera.moveCommand == "Bwd"):
-            robot.moveBackwards(0.1)
-        elif(threaded_camera.moveCommand == "stop"):
+            robot.moveBackwards(speed=0.1)
+        elif(threaded_camera.moveCommand == "Stop"):
             robot.moveStop()
 
         # Wait for Esc key to stop

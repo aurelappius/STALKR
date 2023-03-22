@@ -37,6 +37,8 @@ while 1:
     # Detects faces of different sizes in the input image
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
+    faces = faces[0]
+
     for (x, y, w, h) in faces:
         # To draw a rectangle in a face
         cv2.rectangle(img, (x, y), (x+w, y+h), (255, 255, 0), 2)
