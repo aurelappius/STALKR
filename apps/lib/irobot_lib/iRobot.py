@@ -8,20 +8,29 @@ class iRobot:
         # Serial port name "ttyUSB0"
         self.port = "/dev/ttyUSB0"
         self.sensors = None
+        self.enabledClass = False
         # Initialize the bot in full access mode
         self.start()
-        # Ensure bot is stopped
-        #self.drive_stop()
 
     def start(self):
-        self.bot = Create2(port=self.port)
-        self.bot.start()
-        # No protection/safety in full mode
-        self.bot.full()
-        self.sensors = self.bot.get_sensors()
+        try:
+            self.bot = Create2(port=self.port)
+            self.bot.start()
+            # No protection/safety in full mode
+            self.bot.full()
+            self.sensors = self.bot.get_sensors()
+            self.enabledClass = True
+        except:
+            self.enabledClass = False
+            return
+
+# Public Methods
 
     # Inputs: speed = 0 - 1 (float)
     def moveForward(self, speed):
+        if(self.enabledClass == False):
+            return
+        
         power = iRobot.speedToPower(self, speedToConvert=speed)
         self.bot.drive_direct(power, power)
 
@@ -53,28 +62,41 @@ class iRobot:
 
     # Inputs: speed = 0 - 1 (float)
     def moveBackwards(self, speed):
+        if(self.enabledClass == False):
+            return
         power = iRobot.speedToPower(self, speedToConvert=speed)
         self.bot.drive_direct(-power, -power)
 
     # Inputs: speed = 0 - 1 (float)
     def turnLeft(self, speed):
+        if(self.enabledClass == False):
+            return
         power = iRobot.speedToPower(self, speedToConvert=speed)
         self.bot.drive_direct(-power, power)
 
     # Inputs: speed = 0 - 1 (float)
     def turnRight(self, speed):
+        if(self.enabledClass == False):
+            return
         power = iRobot.speedToPower(self, speedToConvert=speed)
         self.bot.drive_direct(power, -power)
 
     def moveStop(self):
+        if(self.enabledClass == False):
+            return
         self.bot.drive_stop()
 
     def get_sensors(self):
+        if(self.enabledClass == False):
+            return
         self.sensors = self.bot.get_sensors()
 
     def close(self):
+        if(self.enabledClass == False):
+            return
         self.bot.close()
 
+# Private Methods
     # Inputs: speed = 0 - 1 (float)
     # Returns: power = -500 - 500 (int)
     def speedToPower(self, speedToConvert):
