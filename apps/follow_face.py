@@ -109,15 +109,15 @@ if __name__ == '__main__':
             pass
 
         if(threaded_camera.rotateCommand == "Right"):
-            robot.turnRight(speed=0.1)
+            robot.turnRight(speed=0.03)
         elif(threaded_camera.rotateCommand == "Left"):
-            robot.turnLeft(speed=0.1)
+            robot.turnLeft(speed=0.03)
         elif(threaded_camera.rotateCommand == "Stop"):
             robot.moveStop()
         elif(threaded_camera.moveCommand == "Fwd"):
-            robot.moveForward()
+            robot.moveForward(0.1)
         elif(threaded_camera.moveCommand == "Bwd"):
-            robot.moveBackwards()
+            robot.moveBackwards(0.1)
         elif(threaded_camera.moveCommand == "stop"):
             robot.moveStop()
 
