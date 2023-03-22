@@ -113,13 +113,15 @@ if __name__ == '__main__':
         elif(threaded_camera.rotateCommand == "Left"):
             robot.turnLeft(speed=0.03)
         elif(threaded_camera.rotateCommand == "Stop"):
-            robot.moveStop()
+            robot.turnRight(speed=0.0)  # Stop command not working.
+            # robot.moveStop()
         elif(threaded_camera.moveCommand == "Fwd"):
             robot.moveForward(speed=0.1)
         elif(threaded_camera.moveCommand == "Bwd"):
             robot.moveBackwards(speed=0.1)
         elif(threaded_camera.moveCommand == "Stop"):
-            robot.moveStop()
+            robot.moveForward(speed=0.0)  # Stop command not working.
+            # robot.moveStop()
 
         # Wait for Esc key to stop
         k = cv2.waitKey(30) & 0xff
