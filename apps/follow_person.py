@@ -24,7 +24,7 @@ import argparse
 #   'lib/haarcascade/haarcascade_frontalface_default.xml')
 
 
-class ThreadedCamera(object):
+class YOLO(object):
     def __init__(self, src=0):
         self.path = "apps/lib/mobileNetSSD/"
         self.CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
@@ -45,6 +45,11 @@ class ThreadedCamera(object):
         time.sleep(2.0)
         self.fps = FPS().start()
 
+        # # Start self.frame retrieval thread
+        # self.thread = Thread(target=self.update, args=())
+        # self.thread.daemon = True
+        # self.thread.start()
+
         # FPS = 1/X
         # X = desired FPS
         self.FPS = 1/25
@@ -57,13 +62,14 @@ class ThreadedCamera(object):
         self.moveCommand = None
 
     def update(self):
+        print("update")
         while True:
-            frame = self.vs.read()
-            frame = imutils.resize(frame, width=400)
+            self.frame = self.vs.read()
+            self.frame = imutils.resize(self.frame, width=400)
 
-            # grab the frame dimensions and convert it to a blob
-            (h, w) = frame.shape[:2]
-            blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)),
+            # grab the self.frame dimensions and convert it to a blob
+            (h, w) = self.frame.shape[:2]
+            blob = cv2.dnn.blobFromImage(cv2.resize(self.frame, (300, 300)),
                                          0.007843, (300, 300), 127.5)
 
             # pass the blob through the network and obtain the detections and
@@ -87,57 +93,50 @@ class ThreadedCamera(object):
                     box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
                     (startX, startY, endX, endY) = box.astype("int")
 
-                    # draw the prediction on the frame
+                    # draw the prediction on the self.frame
                     label = "{}: {:.2f}%".format(self.CLASSES[idx],
                                                  confidence * 100)
-                    cv2.rectangle(frame, (startX, startY), (endX, endY),
+                    cv2.rectangle(self.frame, (startX, startY), (endX, endY),
                                   self.COLORS[idx], 2)
                     y = startY - 15 if startY - 15 > 15 else startY + 15
-                    cv2.putText(frame, label, (startX, y),
+                    cv2.putText(self.frame, label, (startX, y),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, self.COLORS[idx], 2)
-
-            # show the output frame
-            cv2.imshow("Frame", frame)
+                    # def show_frame(self):
+            cv2.imshow("frame", self.frame)
             key = cv2.waitKey(1) & 0xFF
-
-            # if the `q` key was pressed, break from the loop
-            if key == ord("q"):
-                break
+            # cv2.waitKey(self.FPS_MS)
 
             # update the FPS counter
             self.fps.update()
+        # for (x, y, w, h) in self.faces:
+        #     leftBoundary = x+w/2+self.deadZone/2
+        #     rightBoundary = x+w/2-self.deadZone/2
 
-            # for (x, y, w, h) in self.faces:
-            #     leftBoundary = x+w/2+self.deadZone/2
-            #     rightBoundary = x+w/2-self.deadZone/2
+        #     cv2.rectangle(self.self.frame, (x, y),
+        #                   (x+w, y+h), (255, 255, 0), 2)
 
-            #     cv2.rectangle(self.frame, (x, y),
-            #                   (x+w, y+h), (255, 255, 0), 2)
+        #     if(leftBoundary < width/2):
+        #         print("go right")
+        #         self.rotateCommand = "Right"
+        #     elif(rightBoundary > width/2):
+        #         print("go left")
+        #         self.rotateCommand = "Left"
+        #     else:
+        #         # print("stop")
+        #         # self.rotateCommand = "Stop"
+        #         if(w < width/5):
+        #             print("Fwd")
+        #             self.moveCommand = "Fwd"
+        #         if(w > width/3):
+        #             print("Bwd")
+        #             self.moveCommand = "Bwd"
+        #         else:
+        #             print("Stop")
+        #             self.moveCommand = "Stop"
 
-            #     if(leftBoundary < width/2):
-            #         print("go right")
-            #         self.rotateCommand = "Right"
-            #     elif(rightBoundary > width/2):
-            #         print("go left")
-            #         self.rotateCommand = "Left"
-            #     else:
-            #         # print("stop")
-            #         # self.rotateCommand = "Stop"
-            #         if(w < width/5):
-            #             print("Fwd")
-            #             self.moveCommand = "Fwd"
-            #         if(w > width/3):
-            #             print("Bwd")
-            #             self.moveCommand = "Bwd"
-            #         else:
-            #             print("Stop")
-            #             self.moveCommand = "Stop"
+        # time.sleep(self.FPS)
 
-            time.sleep(self.FPS)
-
-    def show_frame(self):
-        cv2.imshow('frame', self.frame)
-        cv2.waitKey(self.FPS_MS)
+        # show the output self.frame
 
     def close(self):
         self.cap.release()
@@ -146,15 +145,17 @@ class ThreadedCamera(object):
 
 if __name__ == '__main__':
     src = 0
-    threaded_camera = ThreadedCamera(src)
-
+    yolo = YOLO(src)
+    print("started")
     # create irobot instance
     #robot = iRobot()
 
     while True:
         try:
-            threaded_camera.update()
-            threaded_camera.show_frame()
+            # threaded_camera.update()
+            #print("show frame")
+            yolo.update()
+
         except AttributeError:
             pass
 
