@@ -110,6 +110,7 @@ class YOLO(object):
                         he = (endY-startY)
 
                         deadZone = w/3
+                        stopThresh = w/2
                         leftBound = (w - deadZone)/2
                         rightBound = (w + deadZone)/2
                         # cv2.rectangle(self.self.frame, (x, y),
@@ -120,18 +121,15 @@ class YOLO(object):
                         elif(mx > rightBound):
                             print("go left")
                             self.rotateCommand = "Left"
-                        # else:
+                        else:
                             # print("stop")
                             # self.rotateCommand = "Stop"
-                            # if(w < width/5):
-                            #     print("Fwd")
-                            #     self.moveCommand = "Fwd"
-                            # if(w > width/3):
-                            #     print("Bwd")
-                            #     self.moveCommand = "Bwd"
-                            # else:
-                            #     print("Stop")
-                            #     self.moveCommand = "Stop"
+                            if(wi < stopThresh):
+                                print("Fwd")
+                                self.moveCommand = "Fwd"
+                            else:
+                                print("Stop")
+                                self.moveCommand = "Stop"
                         break
 
                     # def show_frame(self):
