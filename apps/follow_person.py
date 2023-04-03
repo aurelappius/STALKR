@@ -64,6 +64,7 @@ class YOLO(object):
     def update(self):
         print("update")
         while True:
+            print("new frame")
             self.frame = self.vs.read()
             self.frame = imutils.resize(self.frame, width=400)
 
@@ -101,9 +102,43 @@ class YOLO(object):
                     y = startY - 15 if startY - 15 > 15 else startY + 15
                     cv2.putText(self.frame, label, (startX, y),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, self.COLORS[idx], 2)
-                    if label == "person":
+                    if self.CLASSES[idx] == "person":
                         print("detected person")
+                        print(i)
                         # follow commands
+                        mx = startX + (endX-startX)/2.0
+                        my = startY + (endY-startY)/2.0
+                        wi = (endX-startX)
+                        he = (endY-startY)
+                        print(startX)
+                        print(startY)
+                        break
+                        # for (x, y, w, h) in self.faces:
+                        #     leftBoundary = x+w/2+self.deadZone/2
+                        #     rightBoundary = x+w/2-self.deadZone/2
+
+                        #     cv2.rectangle(self.self.frame, (x, y),
+                        #                   (x+w, y+h), (255, 255, 0), 2)
+
+                        #     if(leftBoundary < width/2):
+                        #         print("go right")
+                        #         self.rotateCommand = "Right"
+                        #     elif(rightBoundary > width/2):
+                        #         print("go left")
+                        #         self.rotateCommand = "Left"
+                        #     else:
+                        #         # print("stop")
+                        #         # self.rotateCommand = "Stop"
+                        #         if(w < width/5):
+                        #             print("Fwd")
+                        #             self.moveCommand = "Fwd"
+                        #         if(w > width/3):
+                        #             print("Bwd")
+                        #             self.moveCommand = "Bwd"
+                        #         else:
+                        #             print("Stop")
+                        #             self.moveCommand = "Stop"
+
                     # def show_frame(self):
             cv2.imshow("frame", self.frame)
             key = cv2.waitKey(1) & 0xFF
@@ -111,31 +146,6 @@ class YOLO(object):
 
             # update the FPS counter
             self.fps.update()
-        # for (x, y, w, h) in self.faces:
-        #     leftBoundary = x+w/2+self.deadZone/2
-        #     rightBoundary = x+w/2-self.deadZone/2
-
-        #     cv2.rectangle(self.self.frame, (x, y),
-        #                   (x+w, y+h), (255, 255, 0), 2)
-
-        #     if(leftBoundary < width/2):
-        #         print("go right")
-        #         self.rotateCommand = "Right"
-        #     elif(rightBoundary > width/2):
-        #         print("go left")
-        #         self.rotateCommand = "Left"
-        #     else:
-        #         # print("stop")
-        #         # self.rotateCommand = "Stop"
-        #         if(w < width/5):
-        #             print("Fwd")
-        #             self.moveCommand = "Fwd"
-        #         if(w > width/3):
-        #             print("Bwd")
-        #             self.moveCommand = "Bwd"
-        #         else:
-        #             print("Stop")
-        #             self.moveCommand = "Stop"
 
         # time.sleep(self.FPS)
 
@@ -151,31 +161,27 @@ if __name__ == '__main__':
     yolo = YOLO(src)
     print("started")
     # create irobot instance
-    #robot = iRobot()
+    robot = iRobot()
 
     while True:
         try:
-            # threaded_camera.update()
-            #print("show frame")
             yolo.update()
-
         except AttributeError:
             pass
-
-        # if(threaded_camera.rotateCommand == "Right"):
-        #     robot.turnRight(speed=0.03)
-        # elif(threaded_camera.rotateCommand == "Left"):
-        #     robot.turnLeft(speed=0.03)
-        # elif(threaded_camera.rotateCommand == "Stop"):
-        #     robot.turnRight(speed=0.0)  # Stop command not working.
-        #     # robot.moveStop()
-        # elif(threaded_camera.moveCommand == "Fwd"):
-        #     robot.moveForward(speed=0.1)
-        # elif(threaded_camera.moveCommand == "Bwd"):
-        #     robot.moveBackwards(speed=0.1)
-        # elif(threaded_camera.moveCommand == "Stop"):
-        #     robot.moveForward(speed=0.0)  # Stop command not working.
-        #     # robot.moveStop()
+        if(yolo.rotateCommand == "Right"):
+            robot.turnRight(speed=0.03)
+        elif(yolo.rotateCommand == "Left"):
+            robot.turnLeft(speed=0.03)
+        elif(yolo.rotateCommand == "Stop"):
+            robot.turnRight(speed=0.0)  # Stop command not working.
+            # robot.moveStop()
+        elif(yolo.moveCommand == "Fwd"):
+            robot.moveForward(speed=0.1)
+        elif(yolo.moveCommand == "Bwd"):
+            robot.moveBackwards(speed=0.1)
+        elif(yolo.moveCommand == "Stop"):
+            robot.moveForward(speed=0.0)  # Stop command not working.
+            # robot.moveStop()
 
         # Wait for Esc key to stop
         k = cv2.waitKey(30) & 0xff
