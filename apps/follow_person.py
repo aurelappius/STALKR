@@ -104,6 +104,8 @@ class YOLO(object):
                     y = startY - 15 if startY - 15 > 15 else startY + 15
                     cv2.putText(self.frame, label, (startX, y),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, self.COLORS[idx], 2)
+
+                    # Command the Robot
                     if self.CLASSES[idx] == "person":
                         # follow commands
                         mx = startX + (endX-startX)/2.0
@@ -141,14 +143,9 @@ class YOLO(object):
 
             # update the FPS counter
             self.fps.update()
-
-        # time.sleep(self.FPS)
-
-        # show the output self.frame
-
-    def close(self):
-        self.cap.release()
-        cv2.destroyAllWindows()
+            k = cv2.waitKey(30) & 0xff
+            if k == 27:
+                break
 
 
 if __name__ == '__main__':
@@ -157,32 +154,8 @@ if __name__ == '__main__':
     print("started")
     # create irobot instance
 
-    while True:
-        try:
-            yolo.update()
-        except AttributeError:
-            pass
-        # print("LOOPING")
-        # if(yolo.rotateCommand == "Right"):
-        #     print("RIGHT")
-        #     robot.turnRight(speed=0.03)
-        # elif(yolo.rotateCommand == "Left"):
-        #     robot.turnLeft(speed=0.03)
-        #     print("LEFT")
-        # # elif(yolo.rotateCommand == "Stop"):
-        # #     robot.turnRight(speed=0.0)  # Stop command not working.
-        #     # robot.moveStop()
-        # elif(yolo.moveCommand == "Fwd"):
-        #     robot.moveForward(speed=0.1)
-        #     print("FWD")
-        # # elif(yolo.moveCommand == "Bwd"):
-        # #     robot.moveBackwards(speed=0.1)
-        # elif(yolo.moveCommand == "Stop"):
-        #     robot.moveForward(speed=0.0)  # Stop command not working.
-        #     print("STOP")
-        #     # robot.moveStop()
-
-        # Wait for Esc key to stop
-        k = cv2.waitKey(30) & 0xff
-        if k == 27:
-            break
+    # while True:
+    # try:
+    yolo.update()
+    # except AttributeError:
+    #     pass
