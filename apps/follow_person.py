@@ -116,10 +116,10 @@ class YOLO(object):
                         # Gains
                         # fwd_speed = 0.1
                         # turn_speed = 0.03
-                        fwd_speed = 0.3
+                        fwd_speed = 1.5
                         turn_speed = 0.03
                         deadZone = w/3
-                        stopThresh = w/2
+                        stopThresh = w/3
                         leftBound = (w - deadZone)/2
                         rightBound = (w + deadZone)/2
                         # cv2.rectangle(self.self.frame, (x, y),
