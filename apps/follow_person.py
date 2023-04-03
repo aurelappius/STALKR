@@ -64,7 +64,7 @@ class YOLO(object):
     def update(self):
         print("update")
         while True:
-            print("new frame")
+            #print("new frame")
             self.frame = self.vs.read()
             self.frame = imutils.resize(self.frame, width=400)
 
@@ -103,41 +103,36 @@ class YOLO(object):
                     cv2.putText(self.frame, label, (startX, y),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, self.COLORS[idx], 2)
                     if self.CLASSES[idx] == "person":
-                        print("detected person")
-                        print(i)
                         # follow commands
                         mx = startX + (endX-startX)/2.0
                         my = startY + (endY-startY)/2.0
                         wi = (endX-startX)
                         he = (endY-startY)
-                        print(startX)
-                        print(startY)
+
+                        deadZone = w/3
+                        leftBound = (w - deadZone)/2
+                        rightBound = (w + deadZone)/2
+                        # cv2.rectangle(self.self.frame, (x, y),
+                        #               (x+w, y+h), (255, 255, 0), 2)
+                        if(mx < leftBound):
+                            print("go right")
+                            self.rotateCommand = "Right"
+                        elif(mx > rightBound):
+                            print("go left")
+                            self.rotateCommand = "Left"
+                        # else:
+                            # print("stop")
+                            # self.rotateCommand = "Stop"
+                            # if(w < width/5):
+                            #     print("Fwd")
+                            #     self.moveCommand = "Fwd"
+                            # if(w > width/3):
+                            #     print("Bwd")
+                            #     self.moveCommand = "Bwd"
+                            # else:
+                            #     print("Stop")
+                            #     self.moveCommand = "Stop"
                         break
-                        # for (x, y, w, h) in self.faces:
-                        #     leftBoundary = x+w/2+self.deadZone/2
-                        #     rightBoundary = x+w/2-self.deadZone/2
-
-                        #     cv2.rectangle(self.self.frame, (x, y),
-                        #                   (x+w, y+h), (255, 255, 0), 2)
-
-                        #     if(leftBoundary < width/2):
-                        #         print("go right")
-                        #         self.rotateCommand = "Right"
-                        #     elif(rightBoundary > width/2):
-                        #         print("go left")
-                        #         self.rotateCommand = "Left"
-                        #     else:
-                        #         # print("stop")
-                        #         # self.rotateCommand = "Stop"
-                        #         if(w < width/5):
-                        #             print("Fwd")
-                        #             self.moveCommand = "Fwd"
-                        #         if(w > width/3):
-                        #             print("Bwd")
-                        #             self.moveCommand = "Bwd"
-                        #         else:
-                        #             print("Stop")
-                        #             self.moveCommand = "Stop"
 
                     # def show_frame(self):
             cv2.imshow("frame", self.frame)
