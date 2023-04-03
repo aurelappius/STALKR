@@ -113,6 +113,11 @@ class YOLO(object):
                         wi = (endX-startX)
                         he = (endY-startY)
 
+                        # Gains
+                        # fwd_speed = 0.1
+                        # turn_speed = 0.03
+                        fwd_speed = 0.3
+                        turn_speed = 0.03
                         deadZone = w/3
                         stopThresh = w/2
                         leftBound = (w - deadZone)/2
@@ -121,16 +126,16 @@ class YOLO(object):
                         #               (x+w, y+h), (255, 255, 0), 2)
                         if(mx < leftBound):
                             print("go right")
-                            self.robot.turnRight(speed=0.03)
+                            self.robot.turnRight(speed=turn_speed)
                         elif(mx > rightBound):
                             print("go left")
-                            self.robot.turnLeft(speed=0.03)
+                            self.robot.turnLeft(speed=turn_speed)
                         else:
                             # print("stop")
                             # self.rotateCommand = "Stop"
                             if(wi < stopThresh):
                                 print("Fwd")
-                                self.robot.moveForward(speed=0.1)
+                                self.robot.moveForward(speed=fwd_speed)
                             else:
                                 print("Stop")
                                 self.robot.moveForward(speed=0.0)
