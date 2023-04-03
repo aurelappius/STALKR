@@ -119,7 +119,7 @@ class YOLO(object):
                         fwd_speed = 1.5
                         turn_speed = 0.03
                         deadZone = w/3
-                        stopThresh = w/3
+                        stopThresh = w/2.5
                         leftBound = (w - deadZone)/2
                         rightBound = (w + deadZone)/2
                         # cv2.rectangle(self.self.frame, (x, y),
