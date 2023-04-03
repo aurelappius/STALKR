@@ -61,6 +61,8 @@ class YOLO(object):
         self.rotateCommand = None
         self.moveCommand = None
 
+        self.robot = iRobot()
+
     def update(self):
         print("update")
         while True:
@@ -117,19 +119,19 @@ class YOLO(object):
                         #               (x+w, y+h), (255, 255, 0), 2)
                         if(mx < leftBound):
                             print("go right")
-                            self.rotateCommand = "Right"
+                            self.robot.turnRight(speed=0.03)
                         elif(mx > rightBound):
                             print("go left")
-                            self.rotateCommand = "Left"
+                            self.robot.turnLeft(speed=0.03)
                         else:
                             # print("stop")
                             # self.rotateCommand = "Stop"
                             if(wi < stopThresh):
                                 print("Fwd")
-                                self.moveCommand = "Fwd"
+                                self.robot.moveForward(speed=0.1)
                             else:
                                 print("Stop")
-                                self.moveCommand = "Stop"
+                                self.robot.moveForward(speed=0.0)
                         break
 
                     # def show_frame(self):
@@ -154,27 +156,31 @@ if __name__ == '__main__':
     yolo = YOLO(src)
     print("started")
     # create irobot instance
-    robot = iRobot()
 
     while True:
         try:
             yolo.update()
         except AttributeError:
             pass
-        if(yolo.rotateCommand == "Right"):
-            robot.turnRight(speed=0.03)
-        elif(yolo.rotateCommand == "Left"):
-            robot.turnLeft(speed=0.03)
-        elif(yolo.rotateCommand == "Stop"):
-            robot.turnRight(speed=0.0)  # Stop command not working.
-            # robot.moveStop()
-        elif(yolo.moveCommand == "Fwd"):
-            robot.moveForward(speed=0.1)
-        elif(yolo.moveCommand == "Bwd"):
-            robot.moveBackwards(speed=0.1)
-        elif(yolo.moveCommand == "Stop"):
-            robot.moveForward(speed=0.0)  # Stop command not working.
-            # robot.moveStop()
+        # print("LOOPING")
+        # if(yolo.rotateCommand == "Right"):
+        #     print("RIGHT")
+        #     robot.turnRight(speed=0.03)
+        # elif(yolo.rotateCommand == "Left"):
+        #     robot.turnLeft(speed=0.03)
+        #     print("LEFT")
+        # # elif(yolo.rotateCommand == "Stop"):
+        # #     robot.turnRight(speed=0.0)  # Stop command not working.
+        #     # robot.moveStop()
+        # elif(yolo.moveCommand == "Fwd"):
+        #     robot.moveForward(speed=0.1)
+        #     print("FWD")
+        # # elif(yolo.moveCommand == "Bwd"):
+        # #     robot.moveBackwards(speed=0.1)
+        # elif(yolo.moveCommand == "Stop"):
+        #     robot.moveForward(speed=0.0)  # Stop command not working.
+        #     print("STOP")
+        #     # robot.moveStop()
 
         # Wait for Esc key to stop
         k = cv2.waitKey(30) & 0xff
