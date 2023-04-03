@@ -101,6 +101,9 @@ class YOLO(object):
                     y = startY - 15 if startY - 15 > 15 else startY + 15
                     cv2.putText(self.frame, label, (startX, y),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, self.COLORS[idx], 2)
+                    if label == "person":
+                        print("detected person")
+                        # follow commands
                     # def show_frame(self):
             cv2.imshow("frame", self.frame)
             key = cv2.waitKey(1) & 0xFF
