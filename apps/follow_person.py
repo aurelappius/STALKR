@@ -13,17 +13,6 @@ import imutils
 import argparse
 
 
-# load the required trained XML classifiers
-# https://github.com/Itseez/opencv/blob/master/
-# data/haarcascades/haarcascade_frontalface_default.xml
-# Trained XML classifiers describes some features of some
-# object we want to detect a cascade function is trained
-# from a lot of positive(faces) and negative(non-faces)
-# images.
-# face_cascade = cv2.CascadeClassifier(
-#   'lib/haarcascade/haarcascade_frontalface_default.xml')
-
-
 class YOLO(object):
     def __init__(self, src=0):
         self.path = "apps/lib/mobileNetSSD/"
@@ -45,13 +34,6 @@ class YOLO(object):
         time.sleep(2.0)
         self.fps = FPS().start()
 
-        # # Start self.frame retrieval thread
-        # self.thread = Thread(target=self.update, args=())
-        # self.thread.daemon = True
-        # self.thread.start()
-
-        # FPS = 1/X
-        # X = desired FPS
         self.FPS = 1/25
         self.FPS_MS = int(self.FPS * 1000)
 
