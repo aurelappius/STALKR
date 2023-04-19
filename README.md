@@ -27,4 +27,5 @@ The code uses the ```pycreate2``` python library to communicate with the iRobot.
 
 ## Demonstration
 The following youtube video shows a successful demonstration of the ```follow_person.py``` script runnning on our robot.
-[![IMAGE ALT TEXT](http://img.youtube.com/vi/n8nV72KoJ5c /0.jpg)](http://www.youtube.com/watch?v=n8nV72KoJ5c  "MECH 464 Project Video")
+
+[ ![IMAGE ALT TEXT](http://img.youtube.com/vi/n8nV72KoJ5c/0.jpg) ](http://www.youtube.com/watch?v=n8nV72KoJ5c  "MECH 464 Project Video")
