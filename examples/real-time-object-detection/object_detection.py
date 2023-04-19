@@ -84,6 +84,7 @@ while True:
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
 
     # show the output frame
+    frame = imutils.resize(frame, width=800)
     cv2.imshow("Frame", frame)
     key = cv2.waitKey(1) & 0xFF
 

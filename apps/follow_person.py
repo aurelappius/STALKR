@@ -126,28 +126,30 @@ class YOLO(object):
                         #               (x+w, y+h), (255, 255, 0), 2)
                         if(mx < leftBound):
                             print("go right")
-                            eyesimg = cv2.imread("apps/bin/Left.png")
+                            eyesimg = cv2.imread("apps/lib/eyes/Left.png")
                             self.robot.turnRight(speed=turn_speed)
                         elif(mx > rightBound):
                             print("go left")
-                            eyesimg = cv2.imread("apps/bin/Right.png")
+                            eyesimg = cv2.imread("apps/lib/eyes/Right.png")
                             self.robot.turnLeft(speed=turn_speed)
                         else:
                             # print("stop")
                             # self.rotateCommand = "Stop"
                             if(wi < stopThresh):
                                 print("Fwd")
-                                eyesimg = cv2.imread("apps/bin/Forward.png")
+                                eyesimg = cv2.imread(
+                                    "apps/lib/eyes/Forward.png")
                                 self.robot.moveForward(speed=fwd_speed)
                             else:
                                 print("Stop")
-                                eyesimg = cv2.imread("apps/bin/Stop.png")
+                                eyesimg = cv2.imread("apps/lib/eyes/Stop.png")
                                 self.robot.moveForward(speed=0.0)
                         break
 
                     # def show_frame(self):
+            self.frame = imutils.resize(self.frame, width=800)
             cv2.imshow("frame", self.frame)
-            eyesimg = imutils.resize(eyesimg, width=400)
+            eyesimg = imutils.resize(eyesimg, width=800)
             cv2.imshow("eyes", eyesimg)
             key = cv2.waitKey(1) & 0xFF
             # cv2.waitKey(self.FPS_MS)
