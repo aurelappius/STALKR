@@ -23,7 +23,7 @@ To control the robot, we use this exteremly simple control approach. If we detec
 ## Code
 The code uses the ```pycreate2``` python library to communicate with the iRobot. The Computervision algorithms are based on ```openCV```. The codebase contains the following two executables:
 * ```follow_face.py``` was the first app that we used during development. It uses the Haar-Cascade Face Detection Algorithm to find a face in the camera image. After a successful try, we switched to ```follow_person.py``` because when following a person from behind, the face is usually not visible. 
-* ```follow_person.py``` is the second app that uses MobilenetSSD for object detection. We filter it for objects that are classified as persons and then use our control scheme to follow. 
+* ```follow_person.py``` is the second app that uses MobilenetSSD for object detection. We filter it for objects that are classified as persons and then use our control scheme to follow. Additionally, eyes are shown on the screen to indicate the direction the robot is going.
 
 ## Current Problems / Further Work
 * The robot can only follow one person. When there are multiple persons in the room, the robot cannot distinguish between the them. This will result the follow algorithm to fail.
