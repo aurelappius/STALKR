@@ -4,6 +4,15 @@ This Repository contains the Code and other resources used in the STALKR project
 The goal of the project was to create a robot that could follow a person using input from an RGB camera.
 
 ## Robot Architecture
+The Robot is built using the following components:
+* iRobot Create 
+* Raspberry Pi 4 (with raspian OS)
+* Powerbank
+* Raspberry Camera
+
+We mounted the components to the iRobot create in the following way:
+
+![picture alt](https://github.com/aurelappius/STALKR/blob/master/documentation/images/system_architecture.png "System Architecture")
 
 ## Code Architecture
 
